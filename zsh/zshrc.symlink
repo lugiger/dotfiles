@@ -60,7 +60,9 @@ if command -v zoxide &>/dev/null; then
 fi
 
 # --- fzf ---
-[[ -f ~/.fzf.zsh ]] && source ~/.fzf.zsh
+if command -v fzf &>/dev/null; then
+    source <(fzf --zsh)
+fi
 
 # --- Source all .zsh config files ---
 for config ($ZSH_CONFIG/**/*.zsh) source $config

@@ -1,0 +1,96 @@
+export DOTFILES=$HOME/.dotfiles
+export ZSH_CONFIG=$DOTFILES/zsh
+
+# --- Nix ---
+# /etc/profile.d/ is bash-only; zsh needs this sourced explicitly
+if [ -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh' ]; then
+    . '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'
+fi
+
+# --- Zinit plugin manager ---
+ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
+if [ ! -d "$ZINIT_HOME" ]; then
+    echo "Installing Zinit..."
+    mkdir -p "$(dirname $ZINIT_HOME)"
+    git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME" || {
+        echo "ERROR: Failed to clone Zinit. Check your internet connection."
+        echo "Run manually: git clone https://github.com/zdharma-continuum/zinit.git $ZINIT_HOME"
+        return 1
+    }
+fi
+source "${ZINIT_HOME}/zinit.zsh"
+
+# Plugins
+zinit light zsh-users/zsh-autosuggestions
+zinit light zsh-users/zsh-syntax-highlighting
+zinit light zsh-users/zsh-completions
+zinit snippet OMZ::plugins/git/git.plugin.zsh
+zinit snippet OMZ::plugins/kubectl/kubectl.plugin.zsh
+
+# Prompt: Starship
+if command -v starship &>/dev/null; then
+    eval "$(starship init zsh)"
+fi
+
+# --- Environment ---
+export REPORTTIME=10
+[[ -d ~/code ]] && export CODE_DIR=~/code
+
+# GO
+export GOPATH=$HOME/go
+export PATH=$PATH:$GOPATH/bin
+
+# npm global
+export PATH="$HOME/.npm-global/bin:$PATH"
+
+# krew (kubectl plugins)
+export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
+
+# pipx / local bin
+export PATH="$PATH:$HOME/.local/bin"
+
+# --- mise (version manager: Node, Python, Ruby, Go, etc.) ---
+if command -v mise &>/dev/null; then
+    eval "$(mise activate zsh)"
+fi
+
+# --- zoxide (better cd) ---
+if command -v zoxide &>/dev/null; then
+    eval "$(zoxide init zsh)"
+fi
+
+# --- fzf ---
+[[ -f ~/.fzf.zsh ]] && source ~/.fzf.zsh
+
+# --- Source all .zsh config files ---
+for config ($ZSH_CONFIG/**/*.zsh) source $config
+
+# --- Local overrides (not tracked in git) ---
+[[ -f ~/.localrc ]] && source ~/.localrc
+
+# --- Completions ---
+autoload -U compinit
+compinit
+
+for config ($ZSH_CONFIG/**/*completion.sh) source $config
+
+# --- Platform-specific ---
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    # Homebrew (Apple Silicon)
+    [[ -x /opt/homebrew/bin/brew ]] && eval "$(/opt/homebrew/bin/brew shellenv)"
+    # Homebrew (Intel)
+    [[ -x /usr/local/bin/brew ]] && eval "$(/usr/local/bin/brew shellenv)"
+    # gcloud SDK
+    [[ -f "$HOME/google-cloud-sdk/path.zsh.inc" ]] && source "$HOME/google-cloud-sdk/path.zsh.inc"
+    [[ -f "$HOME/google-cloud-sdk/completion.zsh.inc" ]] && source "$HOME/google-cloud-sdk/completion.zsh.inc"
+fi
+
+# --- KUBECONFIG ---
+export KUBECONFIG=~/.kube/config
+
+# --- Terminal colors ---
+if [ -e /usr/share/terminfo/x/xterm-256color ]; then
+    export TERM='xterm-256color'
+else
+    export TERM='xterm-color'
+fi

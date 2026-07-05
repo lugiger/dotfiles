@@ -1,0 +1,7 @@
+new -s dev -n ide
+splitw -v -p 10 -t dev
+selectp -t 2
+splitw -h -p 30 -t dev
+neww -n shell
+selectw -t dev:1
+selectp -t 1

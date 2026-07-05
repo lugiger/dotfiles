@@ -1,0 +1,56 @@
+" move to begin/end of line
+nnoremap K H
+nnoremap J L
+nnoremap H 0
+nnoremap L $
+
+imap jj <ESC>
+
+"set leader to <SPACE>
+let mapleader=" "
+
+vmap <Tab> >
+vmap <S-Tab> <
+nmap <Tab> >>
+nmap <S-Tab> <<
+
+" shortcut to save
+nmap <leader>, :w<cr>
+
+"Set up smarter search behaviour
+set ignorecase
+set smartcase
+set gdefault
+set incsearch
+set showmatch
+set hlsearch
+
+" search for word under the cursor
+nnoremap <leader>/ "fyiw :/<c-r>f<cr>
+
+"====[ Accelerated up and down on wrapped lines ]============
+nnoremap j gj
+nnoremap k gk
+
+set surround
+
+map <silent> <C-h> :call WinMove('h')<cr>
+map <silent> <C-j> :call WinMove('j')<cr>
+map <silent> <C-k> :call WinMove('k')<cr>
+map <silent> <C-l> :call WinMove('l')<cr>
+
+
+" Window movement shortcuts
+" move to the window in the direction shown, or create a new window
+function! WinMove(key)
+    let t:curwin = winnr()
+    exec "wincmd ".a:key
+    if (t:curwin == winnr())
+        if (match(a:key,'[jk]'))
+            wincmd v
+        else
+            wincmd s
+        endif
+        exec "wincmd ".a:key
+    endif
+endfunction

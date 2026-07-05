@@ -1,0 +1,4 @@
+[tools]
+herdr = "latest"
+node = "lts"
+python = "latest"

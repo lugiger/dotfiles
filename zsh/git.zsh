@@ -1,49 +1,22 @@
-# git aliases
-alias ga='git add'
-alias gb='git branch'
-alias gl='git pull'
-alias gp='git push'
-alias gd='git diff'
-alias gdc='git diff --cached'
-alias gs='git status'
-alias gss='git stash save'
-alias gsp='git stash pop'
-alias gmv='git mv'
-alias grm='git rm'
+# Aliases not covered by OMZ git plugin (loaded via zinit in zshrc)
+
+# stage all deleted files
 alias garm='git ls-files --deleted -z | xargs -0 git rm'
-alias grn='git-rename'
-alias glog="git log --oneline"
-alias gsu="git submodule update"
-alias gcm="git checkout master"
-alias gc="git checkout"
 
-# alias git-amend='git commit --amend -C HEAD'
-alias git-undo='git reset --soft HEAD~1'
-alias git-count='git shortlog -sn'
-alias git-undopush="git push -f origin HEAD^:master"
-alias cpbr="git rev-parse --abbrev-ref HEAD | copy"
-# git root
-alias gr='[ ! -z `git rev-parse --show-cdup` ] && cd `git rev-parse --show-cdup || pwd`'
+# copy current branch name to clipboard
+alias cpbr='git rev-parse --abbrev-ref HEAD | copy'
 
+# pull all submodules
 alias sub-pull='git submodule foreach git pull origin main'
 
-function give-credit() {
-    git commit --amend --author $1 <$2> -C HEAD
-}
-
-# a simple git rename file function
-# git does not track case-sensitive changes to a filename.
+# rename a file in a case-sensitive way (git doesn't track case changes)
+alias grn='git-rename'
 function git-rename() {
     git mv $1 "${2}-"
     git mv "${2}-" $2
 }
 
-function g() {
-    if [[ $# > 0 ]]; then
-        # if there are arguments, send them to git
-        git $@
-    else
-        # otherwise, run git status
-        git s
-    fi
+# amend last commit's author
+function give-credit() {
+    git commit --amend --author "$1 <$2>" -C HEAD
 }

@@ -20,5 +20,6 @@ Icon
 tscommand*.txt
 
 .idea
+.netrwhist
 
 **/.claude/settings.local.json

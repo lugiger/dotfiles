@@ -34,7 +34,8 @@ in {
     ".config/herdr".source          = ln "config/herdr";
     ".config/mise".source           = ln "config/mise";
     ".config/starship.toml".source  = ln "config/starship.toml";
-    ".claude/AGENTS.md".source      = ln "AGENTS.md";
+    ".claude/CLAUDE.md".source       = ln "AGENTS.md";
+    "AGENTS.md".source               = ln "AGENTS.md";
     ".claude/settings.json".source  = ln ".claude/settings.json";
     ".zshrc".source                 = ln "zsh/zshrc.symlink";
     ".gitconfig".source             = ln "git/gitconfig.symlink";

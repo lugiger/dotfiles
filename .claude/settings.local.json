@@ -1,10 +1,1 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(grep -rn *)",
-      "WebFetch(domain:github.com)",
-      "WebFetch(domain:raw.githubusercontent.com)",
-      "Bash(gh api *)"
-    ]
-  }
-}
+{}

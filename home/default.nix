@@ -37,6 +37,8 @@ in {
     ".claude/CLAUDE.md".source       = ln "AGENTS.md";
     "AGENTS.md".source               = ln "AGENTS.md";
     ".claude/settings.json".source  = ln ".claude/settings.json";
+    ".claude/skills".source         = ln ".claude/skills";
+    ".claude/commands".source       = ln ".claude/commands";
     ".zshrc".source                 = ln "zsh/zshrc.symlink";
     ".gitconfig".source             = ln "git/gitconfig.symlink";
     ".gitignore_global".source      = ln "git/gitignore_global.symlink";
